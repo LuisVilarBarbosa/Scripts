@@ -1,17 +1,26 @@
 $file1 = Read-Host -Prompt "File 1"
 $file2 = Read-Host -Prompt "File 2"
 
-$f1 = Get-Content $file1
-$f2 = Get-Content $file2
+$bytes1 = [System.IO.File]::ReadAllBytes($file1)
+$bytes2 = [System.IO.File]::ReadAllBytes($file2)
 
-if(($f1 -eq $null) -or ($f2 -eq $null)) {
-    Write-Host "Error."
-}
-elseif($f1 -eq $f2) {
-    Write-Host "The files are equal."
+if($bytes1.length -ne $bytes2.length) {
+	Write-Host "The files are not equal."
 }
 else {
-    Write-Host "The files are not equal."
+	$equal = $true;
+	for($i=0; $i -lt $bytes1.length; $i++) {
+		if($bytes1[$i] -ne $bytes2[$i]) {
+			$equal = $false;
+		}
+	}
+	
+	if($equal -eq $true) {
+		Write-Host "The files are equal."
+	}
+	else {
+		Write-Host "The files are not equal."
+	}
 }
 
 pause
